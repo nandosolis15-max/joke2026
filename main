@@ -1,70 +1,69 @@
-#Caiden Soto
-#RoniBlendz
+# Dictionary storing all jokes and their parts
+joke_data = {
+    "robbers": {
+        "setup": "Calder: ",
+        "response": "",
+        "punchline": "Calder police I've been robbed!"
+    },
+    "tanks": {
+        "setup": "Tank: ",
+        "response": "You are welcome! ",
+        "punchline": ""
+    },
+    "pencils": {
+        "setup": "Broken pencil: ",
+        "response": "",
+        "punchline": "Nevermind, it's pointless!"
+    }
+}
 
+def tell_joke(setup, response, punchline):
+    """Runs the knock‑knock joke in the correct order."""
+    input("Knock Knock: ")
+    input(setup)
+    if response:
+        input(response)
+    if punchline:
+        print(punchline)
 
-# A list of joke topics the user can choose from
-topics = ["robbers", "tanks", "pencils"]
-
-def tell_joke(topic):
-    # Prints the joke based on the topic given.
-        
-# If the user chose the "robbers" joke
-    if topic == "robbers":
-        input("Knock Knock: ")      # User asks who?
-        input("Calder: ")           # User asks Calder who?
-        print("Calder police I've been robbed!")  # Punchline
-
- # If the user chose the "tanks" joke
-    elif topic == "tanks":
-        input("Knock Knock: ")      
-        input("Tank: ")             
-        print("You are welcome!") 
-
-# If the user chose the "pencils" joke
-    elif topic == "pencils":
-        input("Knock Knock: ")
-        input("Broken pencil: ")
-        print("Nevermind, it's pointless!") 
-    
 def ask_for_topic(topics_list):
     """Asks the user which joke they want and returns their choice."""
-                                                                                                                
-# Show the user the list of available topics
     print("Choose a topic:", topics_list)
+    return input("Which one do you want? ")
 
-# Ask the user which topic they want
-    choice = input("Which one do you want? ")
-                                                                                                                                        
-# Return their answer back to the main program
-    return choice
-
+def get_rating():
+    """Asks the user for a rating and prints a satisfaction score."""
+    rating = int(input("Please rate our game 1–10: "))
+    score = rating * 10
+    print("Your satisfaction rate is " + str(score) + "%")
 
 def main():
-# Ask the user if they want to hear a joke at all
+    topics = list(joke_data.keys())  # dynamic list of available jokes
+
     answer = input("Do you want to hear a joke? ")
 
-# If they say no, end the program early
     if answer == "no":
         print("Okay, maybe next time!")
-    return  # Stops the program
-    
-while answer == "yes":
+        return
+
+    # Accept both "yes" and "another joke" as ways to continue
+    while answer in ["yes", "another joke"]:
         print("Great, let's play!")
-        # Ask the user which topic they want
-topic_choice = ask_for_topic(topics)
 
-# Check if the topic is valid (exists in the list)
-if topic_choice in topics:
-     tell_joke(topic_choice)  # Call the joke function
-else:
-      print("Sorry, I don't know that topic.")
-# Ask if they want another joke or if they are finished
-answer = input("Do you want to hear another joke or are you finished? ")
+        topic_choice = ask_for_topic(topics)
 
- # If the user says they are finished, ask for feedback
-if answer == "finished":
-        rating = int(input("Please rate our game 1/10: "))  # Convert rating to a number
-        score = rating * 10  # Turn rating into a percentage
-        print("Your satisfaction rate is " + str(score) + "%")
+        if topic_choice in joke_data:
+            tell_joke(**joke_data[topic_choice])
+            del joke_data[topic_choice]   # remove used joke
+            topics = list(joke_data.keys())
+        else:
+            print("Sorry, that joke is no longer available.")
+
+        # Ask again
+        answer = input("Do you want to hear another joke or are you finished? ")
+
+    # If they say "finished", ask for rating
+    if answer == "finished":
+        get_rating()
 
 main()
